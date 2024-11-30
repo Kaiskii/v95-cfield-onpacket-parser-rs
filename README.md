@@ -1,4 +1,4 @@
-# Straightforward v95 Mushroom Game SendOpcode Packet Parser
+# Straightforward v95 Mushroom Game SendOpcode Parser
 
 ## Usage
 
