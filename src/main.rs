@@ -1,18 +1,33 @@
 use clap::Parser;
+use std::str::FromStr;
 
-/// v95 Opcode CField Opcode Parser
+#[derive(Debug, Clone)]
+struct HexOrDec(i32);
+
+impl FromStr for HexOrDec {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let value = if s.to_lowercase().starts_with("0x") {
+            i32::from_str_radix(&s[2..], 16)
+        } else {
+            s.parse()
+        };
+        value.map(HexOrDec).map_err(|e| e.to_string())
+    }
+}
+
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// OpCode in decimal
+    /// OpCode in decimal or hex (with 0x prefix)
     #[arg(short, long)]
-    opcode: i32,
+    opcode: HexOrDec,
 }
 
 fn main() {
     let args = Args::parse();
-
-    println!("{}", get_packet_handler(args.opcode));
+    println!("{}", get_packet_handler(args.opcode.0));
 }
 
 /// Missing packets
