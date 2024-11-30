@@ -31,25 +31,32 @@ fn main() {
 }
 
 /// Missing packets
-/// - 22 DELETE_CHARACTER_OTP_REQUEST
-/// - 43 INITIAL_QUIZ_START
-/// - 54 Unknown SendOpcode
-/// - 56 MIGRATE_TO_CASH_SHOP_RESULT
-/// - 60 PET_DEAD_MESSAGE
-/// - 63 PARTY_RESULT
-/// - 66 GUILD_REQUEST
-/// - 112 INC_RATE_CHANGED
-/// - 355 BATTLEFIELD_ENTER
-/// - 378 TOURNAMENT_AVATAR_INFO
-/// - 389 Unknown SendOpcode
-/// - 394 CHANGE_MAPLE_POINT_RESULT
-/// - 397 CASH_SHOP_MEMBER_SHOP_RESULT
-/// - 401 Unknown SendOpcode
-/// - 402 Unknown SendOpcode
-/// - 403 Unknown SendOpcode
-/// - 417 Unknown SendOpcode
-/// - 418 GOLD_HAMMER_RESULT
-/// - 419 Unknown SendOpcode
+/// - 22  | 0x16   DELETE_CHARACTER_OTP_REQUEST
+/// - 43  | 0x2B   INITIAL_QUIZ_START
+/// - 54  | 0x36   Unknown SendOpcode
+/// - 56  | 0x38   MIGRATE_TO_CASH_SHOP_RESULT
+/// - 60  | 0x3C   PET_DEAD_MESSAGE
+/// - 63  | 0x3F   PARTY_RESULT
+/// - 66  | 0x42   GUILD_REQUEST
+/// - 112 | 0x70   INC_RATE_CHANGED
+/// - 196 | 0xC4   Unknown SendOpcode
+/// - 208 | 0xD0   DRAGON_LEAVE_FIELD
+/// - 209 | 0xD1   Unknown SendOpcode
+/// - 235 | 0xE5   PREMIUM
+/// - 244 | 0xF4   USER_PET_SKILL_CHANGED
+/// - 249 | 0xF9   USER_OPEN_CONSULT_BOARD
+/// - 277 | 0x115  Unknown SendOpcode
+/// - 355 | 0x15D  BATTLEFIELD_ENTER
+/// - 378 | 0x17A  TOURNAMENT_AVATAR_INFO
+/// - 389 | 0x185  Unknown SendOpcode
+/// - 394 | 0x18A  CHANGE_MAPLE_POINT_RESULT
+/// - 397 | 0x18D  CASH_SHOP_MEMBER_SHOP_RESULT
+/// - 401 | 0x191  Unknown SendOpcode
+/// - 402 | 0x192  Unknown SendOpcode
+/// - 403 | 0x193  Unknown SendOpcode
+/// - 417 | 0x1A1  Unknown SendOpcode
+/// - 418 | 0x1A2  GOLD_HAMMER_RESULT
+/// - 419 | 0x1A3  Unknown SendOpcode
 fn get_packet_handler(n_type: i32) -> &'static str {
     match n_type {
         0 => "CLogin::OnCheckPasswordResult((CLogin *)((char *)this - 8), iPacket)",
@@ -219,7 +226,87 @@ fn get_packet_handler(n_type: i32) -> &'static str {
         176 => "CField::OnFootHoldInfo((CField *)((char *)this - 8), iPacket)",
         177 => "CField::OnRequestFootHoldInfo((CField *)((char *)this - 8), iPacket)",
         178 => "CField_KillCount::OnKillCountInfo((CField_KillCount *)((char *)this - 8), iPacket)",
-        179..=277 => "CUserPool::OnPacket((CUserPool *)TSingleton<CUserPool>::ms_pInstance.m_pInterface, nType, iPacket)",
+        179 => "CUserPool::OnUserEnterField(this, iPacket)",
+        180 => "CUserPool::OnUserLeaveField(this, iPacket)",
+        181 => "CUser::OnChat(p, iPacket, 0)",
+        182 => "CUser::OnChat(p, iPacket, (_bstr_t::Data_t *)1)",
+        183 => "CUser::OnADBoard(p, iPacket)",
+        184 => "CUser::OnMiniRoomBalloon(p, iPacket)",
+        185 => "CUser::SetConsumeItemEffect(p, iPacket)",
+        186 => "CUser::ShowItemUpgradeEffect(p, iPacket)",
+        187 => "CUser::ShowItemHyperUpgradeEffect(p, iPacket)",
+        188 => "CUser::ShowItemOptionUpgradeEffect(p, iPacket)",
+        189 => "CUser::ShowItemReleaseEffect(p, iPacket)",
+        190 => "CUser::ShowItemUnreleaseEffect(p, iPacket)",
+        191 => "CUser::OnHitByUser(p, iPacket)",
+        192 => "CUser::OnTeslaTriangle(p, iPacket)",
+        193 => "CUser::OnFollowCharacter(p, iPacket)",
+        194 => "CUser::OnShowPQReward(p, iPacket)",
+        195 => "CUser::OnSetPhase(p, iPacket)",
+        197 => "CUser::ShowRecoverUpgradeCountEffect(p, iPacket)",
+        198..=205 => "CUser::OnPetPacket(p, v6, iPacket)",
+        206..=207 => "CUser::OnDragonPacket(p, v6, iPacket)",
+        210 => "CUserRemote::OnMove(RemoteUser, iPacket)",
+        211..=214 => "CUserRemote::OnAttack(RemoteUser, nType, iPacket)",
+        215 => "CUserRemote::OnSkillPrepare(RemoteUser, iPacket)",
+        216 => "CUserRemote::OnMovingShootAttackPrepare(RemoteUser, iPacket)",
+        217 => "CUserRemote::OnSkillCancel(RemoteUser, iPacket)",
+        218 => "CUserRemote::OnHit(RemoteUser, iPacket)",
+        219 => "CUser::OnEmotion(RemoteUser, iPacket)",
+        220 => "CUserRemote::OnSetActiveEffectItem(RemoteUser, iPacket)",
+        221 => "CUserRemote::OnShowUpgradeTombEffect(RemoteUser, iPacket)",
+        222 => "CUserRemote::OnSetActivePortableChair(RemoteUser, iPacket)",
+        223 => "CUserRemote::OnAvatarModified(RemoteUser, iPacket)",
+        224 => "CUser::OnEffect(RemoteUser, iPacket)",
+        225 => "CUserRemote::OnSetTemporaryStat(RemoteUser, iPacket)",
+        226 => "CUserRemote::OnResetTemporaryStat(RemoteUser, iPacket)",
+        227 => "CUserRemote::OnReceiveHP(RemoteUser, iPacket)",
+        228 => "CUserRemote::OnGuildNameChanged(RemoteUser, iPacket)",
+        229 => "CUserRemote::OnGuildMarkChanged(RemoteUser, iPacket)",
+        230 => "CUserRemote::OnThrowGrenade(RemoteUser, iPacket)",
+        231 => "CUserLocal::OnSitResult(this, iPacket)",
+        232 => "CUser::OnEmotion(this, iPacket)",
+        233 => "CUser::OnEffect(this, iPacket)",
+        234 => "CUserLocal::OnTeleport(this, iPacket)",
+        236 => "CUserLocal::OnMesoGive_Succeeded(this, iPacket)",
+        237 => "CUserLocal::OnMesoGive_Failed(this, iPacket)",
+        238 => "CUserLocal::OnRandomMesobag_Succeeded(this, iPacket)",
+        239 => "CUserLocal::OnRandomMesobag_Failed(this, iPacket)",
+        240 => "CUserLocal::OnFieldFadeInOut(this, iPacket)",
+        241 => "CUserLocal::OnFieldFadeOutForce(this, iPacket)",
+        242 => "CUserLocal::OnQuestResult(this, iPacket)",
+        243 => "CUserLocal::OnNotifyHPDecByField(this, iPacket)",
+        245 => "CUserLocal::OnBalloonMsg(this, iPacket)",
+        246 => "CUserLocal::OnPlayEventSound(this, iPacket)",
+        247 => "CUserLocal::OnPlayMinigameSound(this, iPacket)",
+        248 => "CUserLocal::OnMakerResult(this, iPacket)",
+        250 => "CUserLocal::OnOpenClassCompetitionPage(this, iPacket)",
+        251 => "CUserLocal::OnOpenUI(this, iPacket)",
+        252 => "CUserLocal::OnOpenUIWithOption(this, iPacket)",
+        253 => "CUserLocal::OnSetDirectionMode(this, iPacket)",
+        254 => "CUserLocal::OnSetStandAloneMode(this, iPacket)",
+        255 => "CUserLocal::OnHireTutor(this, iPacket)",
+        256 => "CUserLocal::OnTutorMsg(this, iPacket)",
+        257 => "CUserLocal::OnIncComboResponse(this, iPacket);",
+        258 => "CUser::OnRandomEmotion(this, iPacket);",
+        259 => "CUserLocal::OnResignQuestReturn(this, iPacket);",
+        260 => "CUserLocal::OnPassMateName(this, iPacket);",
+        261 => "CUserLocal::OnRadioSchedule(this, iPacket);",
+        262 => "CUserLocal::OnOpenSkillGuide(this, iPacket);",
+        263 => "CUserLocal::OnNoticeMsg(this, iPacket);",
+        264 => "CUserLocal::OnChatMsg(this, iPacket);",
+        265 => "CUserLocal::OnBuffzoneEffect(this, iPacket);",
+        266 => "CUserLocal::OnGoToCommoditySN(this, iPacket);",
+        267 => "CUserLocal::OnDamageMeter(this, iPacket);",
+        268 => "CUserLocal::OnTimeBombAttack(this, iPacket);",
+        269 => "CUser::OnPassiveMove(this, iPacket);",
+        270 => "CUserLocal::OnFollowCharacterFailed(this, iPacket);",
+        271 => "CUserLocal::OnVengeanceSkillApply(this, iPacket);",
+        272 => "CUserLocal::OnExJablinApply(this, iPacket);",
+        273 => "CUserLocal::OnAskAPSPEvent(this, iPacket);",
+        274 => "CUserLocal::OnQuestGuideResult(this, iPacket);",
+        275 => "CUserLocal::OnDeliveryQuest(this, iPacket);",
+        276 => "CUserLocal::OnSkillCooltimeSet(this, iPacket);",
         278..=283 => "CSummonedPool::OnPacket(TSingleton<CSummonedPool>::ms_pInstance, nType, iPacket)",
         284..=310 => "CMobPool::OnPacket(TSingleton<CMobPool>::ms_pInstance, nType, iPacket)",
         311..=318 => "CNpcPool::OnPacket(TSingleton<CNpcPool>::ms_pInstance, nType, iPacket)",
